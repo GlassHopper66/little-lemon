@@ -150,3 +150,14 @@ main > section { padding-block: 48px; }
 .confirmed h1:focus { outline: none; }
 .confirmed-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin-top: 24px; }
 .confirmed-actions a:not(.btn) { color: var(--green); font-weight: 700; }
+
+/* ---------- BookingForm validation ---------- */
+.booking-form [aria-invalid="true"] { border-color: #B3261E; border-width: 2px; }
+.field-error { margin: 0; color: #B3261E; font-size: 0.875rem; font-weight: 500; }
+.field-error::before { content: "⚠ "; content: "⚠ " / ""; }   /* ikona bez teksta za screen reader */
+.form-hint { margin: 8px 0 0; font-size: 0.875rem; color: #555; }
+.booking-form input[type="submit"]:disabled {
+  background: var(--light);
+  color: #555;
+  cursor: not-allowed;
+}
