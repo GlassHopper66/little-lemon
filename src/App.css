@@ -25,7 +25,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 #root > header { grid-area: header; padding-block: 16px 8px; }
 #root > nav    { grid-area: nav; }
-#root > main   { grid-area: main; }
+#root > main   { grid-area: main; min-width: 0; } /* grid item ne smije narasti preko širine ekrana (široka tablica scrolla unutar .table-scroll) */
 #root > footer { grid-area: footer; }
 
 @media (min-width: 768px) {

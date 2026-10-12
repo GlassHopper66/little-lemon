@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import useDocumentTitle from './useDocumentTitle';
+import { formatDisplayDate } from './dates';
 
 function ConfirmedBooking() {
   const booking = useLocation().state?.booking;
@@ -18,7 +19,7 @@ function ConfirmedBooking() {
       {booking ? (
         <p className="lead">
           Thank you! Your table for {booking.guests} {booking.guests === 1 ? 'guest' : 'guests'} on{' '}
-          {booking.date} at {booking.time} ({booking.occasion}) is reserved.
+          {formatDisplayDate(booking.date)} at {booking.time} ({booking.occasion}) is reserved.
         </p>
       ) : (
         <p className="lead">Your booking has been confirmed.</p>

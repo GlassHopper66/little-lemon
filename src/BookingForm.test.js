@@ -36,6 +36,12 @@ test('every field is connected to its label with htmlFor and id', () => {
     });
 });
 
+test('the guest limit is shown before the user types', () => {
+  render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
+  expect(screen.getByText('From 1 to 10 guests.')).toBeInTheDocument();
+  expect(screen.getByLabelText('Number of guests')).toHaveAttribute('aria-describedby', 'guests-hint');
+});
+
 test('fills the time options from availableTimes', () => {
   render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
   const options = screen.getAllByRole('option').map((o) => o.textContent);
@@ -103,7 +109,7 @@ describe('JavaScript validation: valid and invalid states per field', () => {
     fireEvent.change(field, { target: { value } });
     fireEvent.blur(field);
     expect(field).toHaveAttribute('aria-invalid', 'false');
-    expect(field).not.toHaveAttribute('aria-describedby');
+    expect(field.getAttribute('aria-describedby') ?? '').not.toContain('-error');
   });
 
   test('time is invalid when no tables are free on that date', () => {

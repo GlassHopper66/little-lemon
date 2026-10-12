@@ -10,3 +10,10 @@ export function formatDate(date) {
   const pad = (n) => String(n).padStart(2, '0');
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
+
+// "2026-10-20" -> "Tue, October 20, 2026" for people (ISO stays in <time dateTime>).
+export function formatDisplayDate(value) {
+  return parseDate(value).toLocaleDateString('en-US', {
+    weekday: 'short', month: 'long', day: 'numeric', year: 'numeric',
+  });
+}

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import App from './App';
-import { formatDate } from './dates';
+import { formatDate, formatDisplayDate } from './dates';
 
 // The 20th of next month: fetchAPI seeds by day of month, so 18:00 is always free that day.
 const bookingDate = (() => { const d = new Date(); d.setMonth(d.getMonth() + 1, 20); return formatDate(d); })();
@@ -49,7 +49,7 @@ test('submitting the form shows the booking confirmation page', () => {
   renderAt('/booking');
   bookTable();
   expect(screen.getByRole('heading', { level: 1, name: 'Booking confirmed' })).toBeInTheDocument();
-  expect(screen.getByText(new RegExp(`${bookingDate} at 18:00`))).toBeInTheDocument();
+  expect(screen.getByText(new RegExp(`${formatDisplayDate(bookingDate)} at 18:00`))).toBeInTheDocument();
 });
 
 test('a confirmed booking is saved and shown in the bookings table', () => {
@@ -61,7 +61,7 @@ test('a confirmed booking is saved and shown in the bookings table', () => {
   ]);
   fireEvent.click(screen.getByRole('link', { name: 'Make another reservation' }));
   const table = screen.getByRole('table');
-  expect(table).toHaveTextContent(bookingDate);
+  expect(table).toHaveTextContent(formatDisplayDate(bookingDate));
   expect(table).toHaveTextContent('18:00');
 });
 
@@ -75,4 +75,37 @@ test('the first focusable element is a skip link to the main content', () => {
 test('each page sets its own document title', () => {
   renderAt('/booking');
   expect(document.title).toBe('Reserve a table · Little Lemon');
+});
+
+test('a booking can be cancelled after confirming, and its time becomes free again', () => {
+  renderAt('/booking');
+  bookTable();
+  fireEvent.click(screen.getByRole('link', { name: 'Make another reservation' }));
+  fireEvent.change(screen.getByLabelText('Choose date'), { target: { value: bookingDate } });
+  expect(screen.queryByRole('option', { name: '18:00' })).not.toBeInTheDocument();
+
+  const when = `${formatDisplayDate(bookingDate)} at 18:00`;
+  fireEvent.click(screen.getByRole('button', { name: `Cancel booking on ${when}` }));
+  fireEvent.click(screen.getByRole('button', { name: `Yes, cancel booking on ${when}` }));
+
+  expect(screen.getByText('No bookings yet.')).toBeInTheDocument();
+  expect(screen.getByRole('status')).toHaveTextContent(`Your booking on ${when} was cancelled.`);
+  expect(JSON.parse(localStorage.getItem('littleLemonBookings'))).toEqual([]);
+  expect(screen.getByRole('option', { name: '18:00' })).toBeInTheDocument();
+});
+
+test('keeping a booking leaves it in the table', () => {
+  renderAt('/booking');
+  bookTable();
+  fireEvent.click(screen.getByRole('link', { name: 'Make another reservation' }));
+  const when = `${formatDisplayDate(bookingDate)} at 18:00`;
+  fireEvent.click(screen.getByRole('button', { name: `Cancel booking on ${when}` }));
+  fireEvent.click(screen.getByRole('button', { name: `Keep booking on ${when}` }));
+  expect(screen.getByRole('table')).toHaveTextContent('18:00');
+});
+
+test('the booking page offers help with a phone link', () => {
+  renderAt('/booking');
+  const help = screen.getByText(/booking for more than 10 guests/i);
+  expect(help.querySelector('a')).toHaveAttribute('href', 'tel:+13125550100');
 });

@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Homepage from './Homepage';
 import Chicago from './Chicago';
@@ -47,7 +47,19 @@ function Main() {
   }, [bookingData]);
 
   // The form only knows the date; Main adds the bookings so taken times stay hidden.
-  const dispatchWithBookings = (action) => dispatch({ ...action, bookings: bookingData });
+  // Remember the date the form last asked for, so a cancellation can refresh its times.
+  const lastDate = useRef(formatDate(new Date()));
+
+  const dispatchWithBookings = (action) => {
+    if (action.date) lastDate.current = action.date;
+    dispatch({ ...action, bookings: bookingData });
+  };
+
+  const cancelBooking = (booking) => {
+    const next = bookingData.filter((b) => !(b.date === booking.date && b.time === booking.time));
+    setBookingData(next);
+    dispatch({ type: 'UPDATE_TIMES', date: lastDate.current, bookings: next });
+  };
 
   const submitForm = (formData) => {
     if (submitAPI(formData)) {
@@ -70,6 +82,7 @@ function Main() {
               dispatch={dispatchWithBookings}
               submitForm={submitForm}
               bookingData={bookingData}
+              cancelBooking={cancelBooking}
             />
           }
         />

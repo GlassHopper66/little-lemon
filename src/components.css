@@ -161,3 +161,26 @@ main > section { padding-block: 48px; }
   color: #555;
   cursor: not-allowed;
 }
+
+/* ---------- heuristic evaluation fixes ---------- */
+.form-help { margin-top: 16px; }
+.form-help a { color: var(--green); font-weight: 700; }
+.row-actions { white-space: nowrap; }
+.small-btn {
+  min-height: 32px;
+  margin-right: 8px;
+  padding: 4px 12px;
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--green);
+  font-weight: 700;
+  cursor: pointer;
+}
+.small-btn.danger { border-color: #B3261E; color: #B3261E; }
+.small-btn:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.bookings h2:focus { outline: none; }

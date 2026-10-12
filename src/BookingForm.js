@@ -20,9 +20,9 @@ function BookingForm({ availableTimes, dispatch, submitForm }) {
   // Show a field's error only after the user has left the field or tried to submit.
   const showError = (field) => (touched[field] || submitted) && errors[field];
   const touch = (field) => () => setTouched((prev) => ({ ...prev, [field]: true }));
-  const fieldProps = (field) => ({
+  const fieldProps = (field, hintId) => ({
     'aria-invalid': showError(field) ? 'true' : 'false',
-    'aria-describedby': showError(field) ? `${field}-error` : undefined,
+    'aria-describedby': [hintId, showError(field) && `${field}-error`].filter(Boolean).join(' ') || undefined,
     onBlur: touch(field),
   });
   const errorText = (field) =>
@@ -82,8 +82,9 @@ function BookingForm({ availableTimes, dispatch, submitForm }) {
         value={guests}
         onChange={(e) => setGuests(e.target.value)}
         required
-        {...fieldProps('guests')}
+        {...fieldProps('guests', 'guests-hint')}
       />
+      <p id="guests-hint" className="form-hint">From {MIN_GUESTS} to {MAX_GUESTS} guests.</p>
       {errorText('guests')}
 
       <label htmlFor="occasion">Occasion</label>
