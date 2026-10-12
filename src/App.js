@@ -9,6 +9,7 @@ import './components.css';
 function App() {
   return (
     <>
+      <a className="skip-link" href="#main">Skip to main content</a>
       <Header />
       <Nav />
       <Main />

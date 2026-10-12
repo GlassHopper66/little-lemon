@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import useDocumentTitle from './useDocumentTitle';
 
 function ConfirmedBooking() {
   const booking = useLocation().state?.booking;
   const headingRef = useRef(null);
+  useDocumentTitle('Booking confirmed');
 
   // Move focus to the heading so screen reader users hear the confirmation.
   useEffect(() => {

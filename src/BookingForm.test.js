@@ -27,6 +27,15 @@ test('renders every form field with its label', () => {
   expect(screen.getByRole('button', { name: 'Make Your reservation' })).toBeInTheDocument();
 });
 
+test('every field is connected to its label with htmlFor and id', () => {
+  render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
+  [['Choose date', 'res-date'], ['Choose time', 'res-time'], ['Number of guests', 'guests'], ['Occasion', 'occasion']]
+    .forEach(([label, id]) => {
+      expect(screen.getByText(label)).toHaveAttribute('for', id);
+      expect(screen.getByLabelText(label)).toHaveAttribute('id', id);
+    });
+});
+
 test('fills the time options from availableTimes', () => {
   render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
   const options = screen.getAllByRole('option').map((o) => o.textContent);

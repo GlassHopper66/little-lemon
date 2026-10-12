@@ -58,7 +58,7 @@ function Main() {
   };
 
   return (
-    <main id="main">
+    <main id="main" tabIndex={-1}>
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/about" element={<Chicago />} />

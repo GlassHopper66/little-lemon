@@ -72,3 +72,18 @@ img { max-width: 100%; height: auto; display: block; }
   padding: 0;
   list-style: none;
 }
+
+/* ---------- skip link (WCAG 2.4.1 Bypass Blocks) ---------- */
+.skip-link {
+  position: absolute;               /* izvan grida, ne zauzima ćeliju u #root */
+  left: 16px;
+  top: -100px;
+  z-index: 10;
+  padding: 12px 16px;
+  background: var(--dark, #333);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 8px;
+}
+.skip-link:focus { top: 16px; }
+main:focus { outline: none; }        /* fokus dolazi samo programski, preko skip linka */

@@ -6,7 +6,7 @@ function BookingsTable({ bookingData }) {
         <p>No bookings yet.</p>
       ) : (
         <div className="table-scroll">
-          <table>
+          <table aria-labelledby="bookings-title">
             <thead>
               <tr>
                 <th scope="col">Date</th>

@@ -64,3 +64,15 @@ test('a confirmed booking is saved and shown in the bookings table', () => {
   expect(table).toHaveTextContent(bookingDate);
   expect(table).toHaveTextContent('18:00');
 });
+
+test('the first focusable element is a skip link to the main content', () => {
+  renderAt('/');
+  const skip = screen.getByRole('link', { name: 'Skip to main content' });
+  expect(skip).toHaveAttribute('href', '#main');
+  expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
+});
+
+test('each page sets its own document title', () => {
+  renderAt('/booking');
+  expect(document.title).toBe('Reserve a table · Little Lemon');
+});
