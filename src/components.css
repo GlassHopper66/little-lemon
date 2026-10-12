@@ -123,8 +123,17 @@ main > section { padding-block: 48px; }
   outline: 3px solid var(--green);
   outline-offset: 2px;
 }
+/* input[type="submit"] dijeli selektor .booking-form input (0,1,1),
+   koji bi pregazio .btn (0,1,0); zato gumb ovdje ponavlja izgled .btn */
 .booking-form input[type="submit"] {
   margin-top: 24px;
+  padding: 12px 24px;
   border: 0;
+  border-radius: var(--radius);
+  background: var(--yellow);
+  color: var(--dark);
+  font-weight: 700;
   cursor: pointer;
 }
+.booking-form input[type="submit"]:hover { background: #E5BF0A; }
+.booking-form input[type="submit"]:focus-visible { outline-color: var(--dark); }
