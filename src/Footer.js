@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import navLinks from './navLinks';
 import logo from './assets/logo-footer.png';
 
 function Footer() {
@@ -8,12 +10,9 @@ function Footer() {
         <nav className="md-half lg-quarter" aria-label="Footer">
           <h2>Doormat Navigation</h2>
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/menu">Menu</a></li>
-            <li><a href="/booking">Reservations</a></li>
-            <li><a href="/order">Order online</a></li>
-            <li><a href="/login">Login</a></li>
+            {navLinks.map(link => (
+              <li key={link.to}><Link to={link.to}>{link.label}</Link></li>
+            ))}
           </ul>
         </nav>
         <address className="md-half lg-quarter">
