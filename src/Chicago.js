@@ -13,8 +13,8 @@ function Chicago() {
         </p>
       </div>
       <div className="about-images">
-        <img className="rounded" src={chefsA} alt="Mario and Adrian in the kitchen" width="250" height="300" />
-        <img className="rounded" src={chefsB} alt="Adrian preparing a dish" width="250" height="300" />
+        <img className="rounded" src={chefsA} alt="Chef sprinkling herbs over a fresh salad" width="250" height="300" />
+        <img className="rounded" src={chefsB} alt="Little Lemon's sunny terrace" width="250" height="300" />
       </div>
     </section>
   );

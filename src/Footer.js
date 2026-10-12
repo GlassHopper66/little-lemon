@@ -6,7 +6,7 @@ function Footer() {
   return (
     <footer>
       <div className="grid">
-        <img className="md-half lg-quarter" src={logo} alt="Little Lemon" width="120" height="150" />
+        <img className="md-half lg-quarter" src={logo} alt="Little Lemon" width="120" height="174" />
         <nav className="md-half lg-quarter" aria-label="Footer">
           <h2>Doormat Navigation</h2>
           <ul>
