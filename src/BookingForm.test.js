@@ -25,14 +25,14 @@ test('fills the time options from availableTimes', () => {
 });
 
 test('submits the controlled values', () => {
-  const onSubmit = jest.fn();
-  render(<BookingForm availableTimes={times} dispatch={jest.fn()} onSubmit={onSubmit} />);
+  const submitForm = jest.fn();
+  render(<BookingForm availableTimes={times} dispatch={jest.fn()} submitForm={submitForm} />);
   fireEvent.change(screen.getByLabelText('Choose date'), { target: { value: '2026-10-20' } });
   fireEvent.change(screen.getByLabelText('Choose time'), { target: { value: '19:00' } });
   fireEvent.change(screen.getByLabelText('Number of guests'), { target: { value: '4' } });
   fireEvent.change(screen.getByLabelText('Occasion'), { target: { value: 'Anniversary' } });
   fireEvent.click(screen.getByRole('button', { name: 'Make Your reservation' }));
-  expect(onSubmit).toHaveBeenCalledWith({
+  expect(submitForm).toHaveBeenCalledWith({
     date: '2026-10-20', time: '19:00', guests: 4, occasion: 'Anniversary',
   });
 });

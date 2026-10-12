@@ -40,3 +40,9 @@ test('parseDate reads the date in local time', () => {
   const d = parseDate('2026-10-20');
   expect([d.getFullYear(), d.getMonth(), d.getDate()]).toEqual([2026, 9, 20]);
 });
+
+test('initializeTimes hides times already booked for today', () => {
+  const today = new Date(2026, 9, 20);
+  const bookings = [{ date: '2026-10-20', time: '18:00', guests: 2, occasion: 'Birthday' }];
+  expect(initializeTimes(today, bookings)).not.toContain('18:00');
+});

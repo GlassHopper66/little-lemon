@@ -145,3 +145,8 @@ main > section { padding-block: 48px; }
 .bookings th,
 .bookings td { padding: 8px 16px 8px 0; text-align: left; border-bottom: 1px solid var(--light); }
 .bookings th { font-weight: 700; }
+
+/* ---------- ConfirmedBooking ---------- */
+.confirmed h1:focus { outline: none; }
+.confirmed-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin-top: 24px; }
+.confirmed-actions a:not(.btn) { color: var(--green); font-weight: 700; }
