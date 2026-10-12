@@ -3,6 +3,12 @@ import BookingForm from './BookingForm';
 
 const times = ['17:00', '18:00', '19:00'];
 
+test('Renders the BookingForm static text', () => {
+  render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
+  const labelElement = screen.getByText('Choose date');
+  expect(labelElement).toBeInTheDocument();
+});
+
 test('renders every form field with its label', () => {
   render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
   expect(screen.getByLabelText('Choose date')).toBeInTheDocument();
