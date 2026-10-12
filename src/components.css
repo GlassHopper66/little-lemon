@@ -137,3 +137,11 @@ main > section { padding-block: 48px; }
 }
 .booking-form input[type="submit"]:hover { background: #E5BF0A; }
 .booking-form input[type="submit"]:focus-visible { outline-color: var(--dark); }
+
+/* ---------- BookingsTable ---------- */
+.bookings { margin-top: 48px; }
+.table-scroll { overflow-x: auto; }
+.bookings table { border-collapse: collapse; min-width: 320px; }
+.bookings th,
+.bookings td { padding: 8px 16px 8px 0; text-align: left; border-bottom: 1px solid var(--light); }
+.bookings th { font-weight: 700; }
