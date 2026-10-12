@@ -1,8 +1,8 @@
 function Nav() {
   return (
     <nav aria-label="Main">
-      <ul>
-        <li><a href="/">Home</a></li>
+      <ul className="nav-list">
+        <li><a href="/" aria-current="page">Home</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/menu">Menu</a></li>
         <li><a href="/booking">Reservations</a></li>

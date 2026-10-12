@@ -1,0 +1,96 @@
+/* ---------- tokens from the style guide ---------- */
+:root {
+  --green:  #495E57;
+  --yellow: #F4CE14;
+  --salmon: #EE9972;
+  --peach:  #FBDABB;
+  --light:  #EDEFEE;
+  --dark:   #333333;
+  --font-display: "Markazi Text", Georgia, serif;
+  --font-body:    "Karla", Arial, sans-serif;
+  --radius: 16px;
+  --shadow: 0 4px 12px rgb(0 0 0 / 0.12);
+}
+
+/* ---------- text ---------- */
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;              /* 16px: Paragraph */
+  line-height: 1.5;
+  color: var(--dark);
+  background: #fff;
+}
+
+h1, h2, h3, h4, h5, h6 { margin: 0 0 0.5em; line-height: 1.1; }
+
+h1 {                             /* Display title: Markazi Medium 64 */
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.75rem, 1.9rem + 3.6vw, 4rem);   /* 44 -> 64px */
+  color: var(--green);           /* yellow only on the green hero (contrast) */
+}
+
+h2 {                             /* Sub title: Markazi Regular 40 */
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 2.5rem);    /* 32 -> 40px */
+}
+
+h3 {                             /* Card title: Karla Bold 18 */
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+h4, h5, h6 {                     /* Section title: Karla ExtraBold 20 UPPER */
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+p { margin: 0 0 1em; max-width: 65ch; }
+
+.lead      { font-size: 1.125rem; font-weight: 500; }   /* Lead 18 Medium */
+.highlight { font-weight: 500; color: var(--dark); }    /* Highlight 16 Medium */
+.price     { font-weight: 700; color: var(--dark); }
+
+button, input, select, textarea { font: inherit; }
+
+/* ---------- navigation ---------- */
+.nav-list a {
+  display: inline-block;
+  padding: 8px 4px;              /* larger touch target */
+  font-weight: 700;
+  color: var(--dark);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+}
+
+.nav-list a:hover,
+.nav-list a[aria-current="page"] {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- images ---------- */
+img { max-width: 100%; height: auto; display: block; }
+.rounded { border-radius: var(--radius); object-fit: cover; }
+.shadow  { box-shadow: var(--shadow); }
+
+/* ---------- footer ---------- */
+footer { background: var(--green); color: #fff; padding-block: 32px; }
+footer h2 { font-family: var(--font-body); font-size: 1.125rem; font-weight: 700; }
+footer ul { list-style: none; margin: 0; padding: 0; }
+footer a { color: #fff; }
+footer address { font-style: normal; }
+footer a:focus-visible { outline-color: var(--yellow); }
