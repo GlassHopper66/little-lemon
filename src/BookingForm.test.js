@@ -33,17 +33,77 @@ test('fills the time options from availableTimes', () => {
   expect(options).toEqual(expect.arrayContaining(times));
 });
 
-test('applies HTML5 validation attributes', () => {
-  render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
-  const date = screen.getByLabelText('Choose date');
-  expect(date).toHaveAttribute('required');
-  expect(date).toHaveAttribute('min', inDays(0));
-  expect(screen.getByLabelText('Choose time')).toHaveAttribute('required');
-  const guests = screen.getByLabelText('Number of guests');
-  expect(guests).toHaveAttribute('required');
-  expect(guests).toHaveAttribute('min', '1');
-  expect(guests).toHaveAttribute('max', '10');
-  expect(screen.getByLabelText('Occasion')).toHaveAttribute('required');
+describe('HTML5 validation attributes', () => {
+  beforeEach(() => {
+    render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
+  });
+
+  test('date input is required and cannot be in the past', () => {
+    const date = screen.getByLabelText('Choose date');
+    expect(date).toHaveAttribute('type', 'date');
+    expect(date).toHaveAttribute('required');
+    expect(date).toHaveAttribute('min', inDays(0));
+  });
+
+  test('time select is required', () => {
+    expect(screen.getByLabelText('Choose time')).toHaveAttribute('required');
+  });
+
+  test('guests input is a required whole number from 1 to 10', () => {
+    const guests = screen.getByLabelText('Number of guests');
+    expect(guests).toHaveAttribute('type', 'number');
+    expect(guests).toHaveAttribute('required');
+    expect(guests).toHaveAttribute('min', '1');
+    expect(guests).toHaveAttribute('max', '10');
+    expect(guests).toHaveAttribute('step', '1');
+  });
+
+  test('occasion select is required and starts without a choice', () => {
+    const occasion = screen.getByLabelText('Occasion');
+    expect(occasion).toHaveAttribute('required');
+    expect(occasion).toHaveValue('');
+  });
+});
+
+describe('JavaScript validation: valid and invalid states per field', () => {
+  test.each([
+    ['Choose date', inDays(-1), 'Please choose today or a later date.'],
+    ['Choose date', '', 'Please choose a date.'],
+    ['Number of guests', '0', 'Please enter at least 1 guest.'],
+    ['Number of guests', '11', 'We can seat up to 10 guests online. Please call us for larger groups.'],
+    ['Occasion', '', 'Please choose an occasion.'],
+  ])('%s = "%s" is invalid', (label, value, message) => {
+    render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
+    const field = screen.getByLabelText(label);
+    fireEvent.change(field, { target: { value } });
+    fireEvent.blur(field);
+    expect(screen.getByText(message)).toBeInTheDocument();
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  test.each([
+    ['Choose date', inDays(0)],
+    ['Choose date', inDays(30)],
+    ['Number of guests', '1'],
+    ['Number of guests', '10'],
+    ['Occasion', 'Birthday'],
+    ['Occasion', 'Anniversary'],
+  ])('%s = "%s" is valid', (label, value) => {
+    render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
+    const field = screen.getByLabelText(label);
+    fireEvent.change(field, { target: { value } });
+    fireEvent.blur(field);
+    expect(field).toHaveAttribute('aria-invalid', 'false');
+    expect(field).not.toHaveAttribute('aria-describedby');
+  });
+
+  test('time is invalid when no tables are free on that date', () => {
+    render(<BookingForm availableTimes={[]} dispatch={jest.fn()} />);
+    const time = screen.getByLabelText('Choose time');
+    fireEvent.blur(time);
+    expect(screen.getByText('There are no free tables on this date. Please choose another date.')).toBeInTheDocument();
+    expect(time).toHaveAttribute('aria-invalid', 'true');
+  });
 });
 
 test('the submit button is disabled until the form is valid', () => {
@@ -82,6 +142,16 @@ test('submits the controlled values', () => {
   expect(submitForm).toHaveBeenCalledWith({
     date: inDays(7), time: '19:00', guests: 4, occasion: 'Anniversary',
   });
+});
+
+test('does not submit when only one field is invalid', () => {
+  const submitForm = jest.fn();
+  render(<BookingForm availableTimes={times} dispatch={jest.fn()} submitForm={submitForm} />);
+  fillValidForm();
+  fireEvent.change(screen.getByLabelText('Choose date'), { target: { value: inDays(-1) } });
+  fireEvent.submit(screen.getByRole('button', { name: 'Make Your reservation' }).closest('form'));
+  expect(submitForm).not.toHaveBeenCalled();
+  expect(screen.getByText('Please choose today or a later date.')).toBeInTheDocument();
 });
 
 test('does not submit an invalid form', () => {
