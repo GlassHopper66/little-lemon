@@ -1,14 +1,22 @@
 import { useState } from 'react';
 
-function BookingForm({ availableTimes, onSubmit }) {
+function BookingForm({ availableTimes, dispatch, onSubmit }) {
   const [date, setDate] = useState('');
   const [time, setTime] = useState(availableTimes[0] ?? '');
   const [guests, setGuests] = useState(1);
   const [occasion, setOccasion] = useState('Birthday');
 
+  // If the slots for a new date no longer contain the chosen time, fall back to the first one.
+  const selectedTime = availableTimes.includes(time) ? time : availableTimes[0] ?? '';
+
+  const handleDateChange = (e) => {
+    setDate(e.target.value);
+    dispatch({ type: 'UPDATE_TIMES', date: e.target.value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit?.({ date, time, guests, occasion });
+    onSubmit?.({ date, time: selectedTime, guests, occasion });
   };
 
   return (
@@ -18,12 +26,12 @@ function BookingForm({ availableTimes, onSubmit }) {
         type="date"
         id="res-date"
         value={date}
-        onChange={(e) => setDate(e.target.value)}
+        onChange={handleDateChange}
         required
       />
 
       <label htmlFor="res-time">Choose time</label>
-      <select id="res-time" value={time} onChange={(e) => setTime(e.target.value)}>
+      <select id="res-time" value={selectedTime} onChange={(e) => setTime(e.target.value)}>
         {availableTimes.map((t) => (
           <option key={t} value={t}>{t}</option>
         ))}
