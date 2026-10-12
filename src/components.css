@@ -100,3 +100,31 @@ main > section { padding-block: 48px; }
 @media (min-width: 768px) {
   .about { grid-template-columns: 1fr 1fr; }
 }
+
+/* ---------- BookingPage / BookingForm ---------- */
+.booking h1 { margin-bottom: 0.25em; }
+.booking-form {
+  display: grid;
+  gap: 8px;
+  max-width: 360px;
+  margin-top: 24px;
+}
+.booking-form label { font-weight: 700; margin-top: 12px; }
+.booking-form input,
+.booking-form select {
+  padding: 10px 12px;
+  border: 1px solid #8a8f8d;          /* 3.4:1 na bijeloj, rub polja je vidljiv */
+  border-radius: 8px;
+  background: #fff;
+  color: var(--dark);
+}
+.booking-form input:focus-visible,
+.booking-form select:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 2px;
+}
+.booking-form input[type="submit"] {
+  margin-top: 24px;
+  border: 0;
+  cursor: pointer;
+}
