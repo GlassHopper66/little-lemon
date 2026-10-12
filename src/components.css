@@ -113,7 +113,7 @@ main > section { padding-block: 48px; }
 .booking-form input,
 .booking-form select {
   padding: 10px 12px;
-  border: 1px solid #8a8f8d;          /* 3.4:1 na bijeloj, rub polja je vidljiv */
+  border: 1px solid #8a8f8d;          /* 3.4:1 on white, so the field border is visible */
   border-radius: 8px;
   background: #fff;
   color: var(--dark);
@@ -123,8 +123,8 @@ main > section { padding-block: 48px; }
   outline: 3px solid var(--green);
   outline-offset: 2px;
 }
-/* input[type="submit"] dijeli selektor .booking-form input (0,1,1),
-   koji bi pregazio .btn (0,1,0); zato gumb ovdje ponavlja izgled .btn */
+/* input[type="submit"] also matches .booking-form input (0,1,1),
+   which would override .btn (0,1,0); so the button repeats the .btn look here */
 .booking-form input[type="submit"] {
   margin-top: 24px;
   padding: 12px 24px;
@@ -154,7 +154,7 @@ main > section { padding-block: 48px; }
 /* ---------- BookingForm validation ---------- */
 .booking-form [aria-invalid="true"] { border-color: #B3261E; border-width: 2px; }
 .field-error { margin: 0; color: #B3261E; font-size: 0.875rem; font-weight: 500; }
-.field-error::before { content: "⚠ "; content: "⚠ " / ""; }   /* ikona bez teksta za screen reader */
+.field-error::before { content: "⚠ "; content: "⚠ " / ""; }   /* icon with no text for screen readers */
 .form-hint { margin: 8px 0 0; font-size: 0.875rem; color: #555; }
 .booking-form input[type="submit"]:disabled {
   background: var(--light);

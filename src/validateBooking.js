@@ -21,7 +21,11 @@ export function validateBooking({ date, time, guests, occasion }, availableTimes
   }
 
   const count = Number(guests);
-  if (guests === '' || !Number.isInteger(count) || count < MIN_GUESTS) {
+  if (guests === '') {
+    errors.guests = 'Please enter the number of guests.';
+  } else if (!Number.isInteger(count)) {
+    errors.guests = 'Please enter a whole number of guests.';
+  } else if (count < MIN_GUESTS) {
     errors.guests = `Please enter at least ${MIN_GUESTS} guest.`;
   } else if (count > MAX_GUESTS) {
     errors.guests = `We can seat up to ${MAX_GUESTS} guests online. Please call us for larger groups.`;

@@ -11,21 +11,25 @@ import { parseDate, formatDate } from './dates';
 
 export { parseDate, formatDate };
 
-const freeTimes = (times, date, bookings = []) => {
+// A time is free when nobody has booked it on that date and, for today, it has not already passed.
+const freeTimes = (times, date, bookings = [], now = new Date()) => {
   const taken = bookings.filter((b) => b.date === date).map((b) => b.time);
-  return times.filter((t) => !taken.includes(t));
+  const isToday = date === formatDate(now);
+  const minutesNow = now.getHours() * 60 + now.getMinutes();
+  const toMinutes = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+  return times.filter((t) => !taken.includes(t) && !(isToday && toMinutes(t) <= minutesNow));
 };
 
-// Initial state: the available times for today, without times that are already booked.
+// Initial state: the available times for today, without times that are already booked or already passed.
 export function initializeTimes(today = new Date(), bookings = []) {
-  return freeTimes(fetchAPI(today), formatDate(today), bookings);
+  return freeTimes(fetchAPI(today), formatDate(today), bookings, today);
 }
 
 // Reducer for the available times.
 export function updateTimes(state, action) {
   switch (action.type) {
     case 'UPDATE_TIMES':
-      return freeTimes(fetchAPI(parseDate(action.date)), action.date, action.bookings);
+      return freeTimes(fetchAPI(parseDate(action.date)), action.date, action.bookings, action.now);
     case 'BOOK_TIME':
       return state.filter((t) => t !== action.time);
     default:

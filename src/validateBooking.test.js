@@ -28,7 +28,7 @@ test('the time must be one of the available times', () => {
 
 test('the number of guests must be a whole number from 1 to 10', () => {
   expect(validateBooking({ ...valid, guests: '0' }, times, today).guests).toBe('Please enter at least 1 guest.');
-  expect(validateBooking({ ...valid, guests: '2.5' }, times, today).guests).toBe('Please enter at least 1 guest.');
+  expect(validateBooking({ ...valid, guests: '2.5' }, times, today).guests).toBe('Please enter a whole number of guests.');
   expect(validateBooking({ ...valid, guests: '11' }, times, today).guests)
     .toBe('We can seat up to 10 guests online. Please call us for larger groups.');
   expect(validateBooking({ ...valid, guests: '10' }, times, today).guests).toBeUndefined();
@@ -36,4 +36,9 @@ test('the number of guests must be a whole number from 1 to 10', () => {
 
 test('the occasion must be selected', () => {
   expect(validateBooking({ ...valid, occasion: '' }, times, today).occasion).toBe('Please choose an occasion.');
+});
+
+test('an empty or non-numeric number of guests gets its own message', () => {
+  expect(validateBooking({ ...valid, guests: '' }, times, today).guests).toBe('Please enter the number of guests.');
+  expect(validateBooking({ ...valid, guests: 'abc' }, times, today).guests).toBe('Please enter a whole number of guests.');
 });
