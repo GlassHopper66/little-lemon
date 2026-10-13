@@ -29,9 +29,10 @@ npm run build                  # production build in the build/ folder
 ## How to try the booking form
 
 1. Open **Reservations** in the navigation (or the **Reserve a Table** button), route `/booking`.
-2. Choose a date, a time, the number of guests (1 to 10) and an occasion.
-3. Press **Make Your reservation**. The confirmation page shows the booking.
-4. Choose **Make another reservation** to see the booking in the **Your bookings** table, where it can be cancelled.
+2. Under **Your table**, choose a date, a time, the number of guests (1 to 10) and an occasion.
+3. Under **Your details**, enter your first name, last name and email (the phone number is optional). Required fields are marked with *.
+4. Press **Make Your reservation**. The confirmation page shows the booking.
+5. Choose **Make another reservation** to see the booking in the **Your bookings** table, where it can be cancelled.
 
 Bookings are saved in `localStorage`, so they survive a page reload. A booked time disappears from the list of times for that date.
 
@@ -39,9 +40,9 @@ Bookings are saved in `localStorage`, so they survive a page reload. A booked ti
 
 | Area | What the app does |
 | --- | --- |
-| Booking form | Controlled React form; available times come from `fetchAPI` and are managed with `useReducer` |
-| Validation | HTML5 attributes (`required`, `min`, `max`, `step`) plus JavaScript validation in `validateBooking.js`; the submit button stays disabled until the form is valid |
-| Edge cases | Past dates, times that have already passed today, booked times, an empty, decimal or out-of-range number of guests, no free tables on a date, broken or blocked `localStorage` |
+| Booking form | Controlled React form in two sections, **Your table** and **Your details**; available times come from `fetchAPI` and are managed with `useReducer` |
+| Validation | HTML5 attributes (`required`, `min`, `max`, `step`) plus JavaScript validation in `validateBooking.js` and `validateDetails.js`; the submit button stays disabled until the form is valid |
+| Edge cases | Past dates, times that have already passed today, booked times, an empty, decimal or out-of-range number of guests, no free tables on a date, broken or blocked `localStorage`, names made only of spaces, an invalid email or phone number |
 | Error messages | Shown after a field is left or the form is submitted, linked with `aria-describedby` and `aria-invalid` |
 | Accessibility | Semantic landmarks, skip link, labels connected with `htmlFor`/`id`, a title per page, focus moved to the confirmation heading, visible focus styles |
 | Responsive layout | CSS Grid with 4 / 8 / 12 columns (mobile / tablet / desktop) |
@@ -57,7 +58,8 @@ src/
   BookingForm.js         the booking form
   BookingsTable.js       saved bookings with cancel / keep
   ConfirmedBooking.js    confirmation page
-  validateBooking.js     validation rules and messages
+  validateBooking.js     table validation rules and messages
+  validateDetails.js     customer details rules (name, email, optional phone)
   api.js                 fetchAPI / submitAPI from the course
   bookingStorage.js      load and save bookings in localStorage
   dates.js               date helpers (local time, readable dates)
@@ -69,7 +71,7 @@ src/
 
 ## Tests
 
-The unit tests cover the form fields and labels, HTML5 validation attributes, valid and invalid values for every field, form submission, `initializeTimes` and `updateTimes` (including booked and already passed times), saving to `localStorage`, and the booking flow from the form to the confirmation page and the bookings table.
+The unit tests cover the form fields and labels, HTML5 validation attributes, valid and invalid values for every field (including the customer details), form submission, `initializeTimes` and `updateTimes` (including booked and already passed times), saving to `localStorage`, and the booking flow from the form to the confirmation page and the bookings table.
 
 ## Notes
 
