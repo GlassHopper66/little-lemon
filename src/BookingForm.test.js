@@ -5,11 +5,22 @@ import { formatDate } from './dates';
 const times = ['17:00', '18:00', '19:00'];
 const inDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return formatDate(d); };
 
-function fillValidForm() {
+function fillTable() {
   fireEvent.change(screen.getByLabelText('Choose date'), { target: { value: inDays(7) } });
   fireEvent.change(screen.getByLabelText('Choose time'), { target: { value: '19:00' } });
   fireEvent.change(screen.getByLabelText('Number of guests'), { target: { value: '4' } });
   fireEvent.change(screen.getByLabelText('Occasion'), { target: { value: 'Anniversary' } });
+}
+
+function fillDetails() {
+  fireEvent.change(screen.getByLabelText('First name'), { target: { value: 'Ana' } });
+  fireEvent.change(screen.getByLabelText('Last name'), { target: { value: 'Horvat' } });
+  fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'ana@example.com' } });
+}
+
+function fillValidForm() {
+  fillTable();
+  fillDetails();
 }
 
 test('Renders the BookingForm static text', () => {
@@ -156,6 +167,7 @@ test('submits the controlled values', () => {
   fireEvent.click(screen.getByRole('button', { name: 'Make Your reservation' }));
   expect(submitForm).toHaveBeenCalledWith({
     date: inDays(7), time: '19:00', guests: 4, occasion: 'Anniversary',
+    firstName: 'Ana', lastName: 'Horvat', email: 'ana@example.com', phone: '',
   });
 });
 
@@ -182,4 +194,49 @@ test('dispatches the selected date when the date changes', () => {
   render(<BookingForm availableTimes={times} dispatch={dispatch} />);
   fireEvent.change(screen.getByLabelText('Choose date'), { target: { value: '2026-10-20' } });
   expect(dispatch).toHaveBeenCalledWith({ type: 'UPDATE_TIMES', date: '2026-10-20' });
+});
+
+describe('Customer details', () => {
+  test('asks for first name, last name, email and an optional phone', () => {
+    render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
+    ['First name', 'Last name', 'Email'].forEach((label) => {
+      expect(screen.getByLabelText(label)).toHaveAttribute('required');
+      expect(screen.getByText(label)).toHaveClass('required');
+    });
+    expect(screen.getByLabelText('Email')).toHaveAttribute('type', 'email');
+    const phone = screen.getByLabelText('Phone (optional)');
+    expect(phone).toHaveAttribute('type', 'tel');
+    expect(phone).not.toHaveAttribute('required');
+  });
+
+  test('explains how required fields are marked', () => {
+    render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
+    expect(screen.getByText(/are required/)).toBeInTheDocument();
+  });
+
+  test.each([
+    ['First name', '', 'Please enter your first name.'],
+    ['Last name', ' ', 'Please enter your last name.'],
+    ['Email', '', 'Please enter your email address.'],
+    ['Email', 'ana@', 'Please enter a valid email address, for example name@example.com.'],
+    ['Phone (optional)', '123', 'Please enter a valid phone number, for example (312) 555-0100.'],
+  ])('%s = "%s" shows a warning', (label, value, message) => {
+    render(<BookingForm availableTimes={times} dispatch={jest.fn()} />);
+    const field = screen.getByLabelText(label);
+    fireEvent.change(field, { target: { value } });
+    fireEvent.blur(field);
+    expect(screen.getByText(message)).toBeInTheDocument();
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  test('the form cannot be submitted without the customer details', () => {
+    const submitForm = jest.fn();
+    render(<BookingForm availableTimes={times} dispatch={jest.fn()} submitForm={submitForm} />);
+    fillTable();
+    const button = screen.getByRole('button', { name: 'Make Your reservation' });
+    expect(button).toBeDisabled();
+    fireEvent.submit(button.closest('form'));
+    expect(submitForm).not.toHaveBeenCalled();
+    expect(screen.getByText('Please enter your first name.')).toBeInTheDocument();
+  });
 });

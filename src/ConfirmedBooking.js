@@ -18,7 +18,7 @@ function ConfirmedBooking() {
       <h1 id="confirmed-title" ref={headingRef} tabIndex={-1}>Booking confirmed</h1>
       {booking ? (
         <p className="lead">
-          Thank you! Your table for {booking.guests} {booking.guests === 1 ? 'guest' : 'guests'} on{' '}
+          Thank you{booking.firstName ? `, ${booking.firstName}` : ''}! Your table for {booking.guests} {booking.guests === 1 ? 'guest' : 'guests'} on{' '}
           {formatDisplayDate(booking.date)} at {booking.time} ({booking.occasion}) is reserved.
         </p>
       ) : (

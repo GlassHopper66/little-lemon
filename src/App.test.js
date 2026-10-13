@@ -42,6 +42,9 @@ function bookTable() {
   fireEvent.change(screen.getByLabelText('Choose time'), { target: { value: '18:00' } });
   fireEvent.change(screen.getByLabelText('Number of guests'), { target: { value: '4' } });
   fireEvent.change(screen.getByLabelText('Occasion'), { target: { value: 'Birthday' } });
+  fireEvent.change(screen.getByLabelText('First name'), { target: { value: 'Ana' } });
+  fireEvent.change(screen.getByLabelText('Last name'), { target: { value: 'Horvat' } });
+  fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'ana@example.com' } });
   fireEvent.click(screen.getByRole('button', { name: 'Make Your reservation' }));
 }
 
@@ -57,7 +60,10 @@ test('a confirmed booking is saved and shown in the bookings table', () => {
   expect(screen.getByText('No bookings yet.')).toBeInTheDocument();
   bookTable();
   expect(JSON.parse(localStorage.getItem('littleLemonBookings'))).toEqual([
-    { date: bookingDate, time: '18:00', guests: 4, occasion: 'Birthday' },
+    {
+      date: bookingDate, time: '18:00', guests: 4, occasion: 'Birthday',
+      firstName: 'Ana', lastName: 'Horvat', email: 'ana@example.com', phone: '',
+    },
   ]);
   fireEvent.click(screen.getByRole('link', { name: 'Make another reservation' }));
   const table = screen.getByRole('table');
